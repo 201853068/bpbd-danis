@@ -6,7 +6,7 @@ if (isset($_GET['tgl']) && isset($_GET['unit'])) {
     $tgl = $_GET['tgl'];
     $unit = $_GET['unit'];
 
-    $query = mysqli_query($koneksi, "SELECT permintaan.tgl_permintaan, permintaan.id_permintaan, permintaan.kode_brg, nama_brg, jumlah, satuan, status FROM permintaan INNER JOIN 
+    $query = mysqli_query($koneksi, "SELECT permintaan.tgl_permintaan, permintaan.id_permintaan, permintaan.kode_brg, nama_brg, jumlah_tersedia, satuan, status FROM permintaan INNER JOIN 
         stokbarang ON permintaan.kode_brg = stokbarang.kode_brg  WHERE tgl_permintaan='$tgl' AND unit='$unit' AND status>1");
 }
 if (isset($_GET['aksi'])) {
@@ -33,7 +33,7 @@ if (isset($_GET['aksi'])) {
                                     <th>Kode Barang</th>
                                     <th>Nama Barang</th>
                                     <th>Satuan</th>
-                                    <th>Jumlah</th>
+                                    <th>Jumlah Tersedia</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -50,7 +50,7 @@ if (isset($_GET['aksi'])) {
                                             <td> <?= $row['kode_brg']; ?> </td>
                                             <td> <?= $row['nama_brg']; ?> </td>
                                             <td> <?= $row['satuan']; ?> </td>
-                                            <td> <?= $row['jumlah']; ?> </td>
+                                            <td> <?= $row['jumlah_tersedia']; ?> </td>
                                             <td> <?php
                                                     $status = '';
                                                     switch ($row['status']) {

@@ -4,7 +4,7 @@ include "../fungsi/koneksi.php";
 include "../fungsi/fungsi.php";
 if (isset($_GET['tgl'])) {
     $tgl = $_GET['tgl'];
-    $query = mysqli_query($koneksi, "SELECT  permintaan.id_permintaan, permintaan.kode_brg, nama_brg, jumlah, satuan, status FROM permintaan INNER JOIN 
+    $query = mysqli_query($koneksi, "SELECT  permintaan.id_permintaan, permintaan.kode_brg, nama_brg, jumlah, jumlah_tersedia, satuan, status FROM permintaan INNER JOIN 
         stokbarang ON permintaan.kode_brg = stokbarang.kode_brg  WHERE tgl_permintaan='$tgl' AND unit='$_SESSION[username]' ");
 }
 
@@ -40,7 +40,8 @@ if (isset($_GET['aksi']) && isset($_GET['id'])) {
                                     <th>Kode Barang</th>
                                     <th>Nama Barang</th>
                                     <th>Satuan</th>
-                                    <th>Jumlah</th>
+                                    <th>Jumlah Permintaan</th>
+                                    <th>Jumlah Tersedia</th>
                                     <th>Status</th>
 
                                 </tr>
@@ -58,6 +59,7 @@ if (isset($_GET['aksi']) && isset($_GET['id'])) {
                                             <td> <?= $row['nama_brg']; ?> </td>
                                             <td> <?= $row['satuan']; ?> </td>
                                             <td> <?= $row['jumlah']; ?> </td>
+                                            <td> <?= $row['jumlah_tersedia']; ?> </td>
                                             <td> <?php
                                                     $status = '';
                                                     switch ($row['status']) {

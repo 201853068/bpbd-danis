@@ -6,7 +6,7 @@ if (isset($_GET['tgl']) && isset($_GET['unit'])) {
     $tgl = $_GET['tgl'];
     $unit = $_GET['unit'];
 
-    $query = mysqli_query($koneksi, "SELECT permintaan.tgl_permintaan, permintaan.id_permintaan, permintaan.kode_brg, nama_brg, jumlah, satuan, status FROM permintaan INNER JOIN 
+    $query = mysqli_query($koneksi, "SELECT permintaan.tgl_permintaan, permintaan.id_permintaan, permintaan.kode_brg, nama_brg, jumlah, jumlah_tersedia, satuan, status FROM permintaan INNER JOIN 
         stokbarang ON permintaan.kode_brg = stokbarang.kode_brg  WHERE tgl_permintaan='$tgl' AND unit='$unit'");
 }
 if (isset($_GET['aksi'])) {
@@ -36,7 +36,8 @@ if (isset($_GET['aksi'])) {
                                     <th>Kode Barang</th>
                                     <th>Nama Barang</th>
                                     <th>Satuan</th>
-                                    <th>Jumlah</th>
+                                    <th>Jumlah Permintaan</th>
+                                    <th>Jumlah Tersedia</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -54,6 +55,7 @@ if (isset($_GET['aksi'])) {
                                             <td> <?= $row['nama_brg']; ?> </td>
                                             <td> <?= $row['satuan']; ?> </td>
                                             <td> <?= $row['jumlah']; ?> </td>
+                                            <td> <?= $row['jumlah_tersedia'] ?> </td>
                                             <td> <?php
                                                     $status = '';
                                                     switch ($row['status']) {
@@ -81,8 +83,36 @@ if (isset($_GET['aksi'])) {
                                             </td>
                                             <td>
                                                 <?php if ($row['status'] < 2) : ?>
-                                                    <a href="<?= 'edit_ketersediaan.php?id=' . $row['id_permintaan'] . '&aksi=tersedia' ?>" class="btn btn-success">Tersedia</a>
-                                                    <a href="<?= 'edit_ketersediaan.php?id=' . $row['id_permintaan'] . '&aksi=tidak-tersedia' ?>" class="btn btn-danger">Tidak Tersedia</a>
+                                                    <div class="row">
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tersedia-<?= $row['id_permintaan'] ?>">
+                                                            Tersedia
+                                                        </button>
+                                                        <div class="modal fade" id="tersedia-<?= $row['id_permintaan'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                            <form action="<?= 'edit_ketersediaan.php?id=' . $row['id_permintaan'] . '&aksi=tersedia' ?>" method="post">
+                                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLongTitle">Konfirmasi Ketersediaan</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="form-group">
+                                                                                <label for="jumlah" class="control-label">Jumlah Tersedia</label>
+                                                                                <input type="number" value="<?= $row['jumlah']; ?>" class="form-control" name="jumlah">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                                            <button type="submit" class="btn btn-primary">Konfirmasi</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <a href="<?= 'edit_ketersediaan.php?id=' . $row['id_permintaan'] . '&aksi=tidak-tersedia' ?>" class="btn btn-danger">Tidak Tersedia</a>
+                                                    </div>
                                                 <?php endif; ?>
                                             </td>
                                 </tr>
